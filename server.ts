@@ -11,14 +11,26 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://issue-tracker-frontend-k6ad.vercel.app'
+];
+
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://issue-tracker-backend-3.onrender.com'
-  ],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }));
+
+// Ensure preflight requests are handled
+app.options("*", cors());
 
 app.use(express.json());
 
