@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: [
+    'http://localhost:3000',
+    'https://issue-tracker-backend-3.onrender.com'
+  ],
   credentials: true,
 }));
 
